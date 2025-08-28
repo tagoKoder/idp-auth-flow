@@ -1,38 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
-import { IdentityApi } from '../../integration/identity/identity.api';
+import { HomeService } from './service/home-service';
+import { Router, RouterLink } from '@angular/router';
+import { WhoAmIResponse } from './service/home-service-model';
 
 @Component({
   standalone: true,
-  imports: [JsonPipe],
-  template: `
-    <h1>Home</h1>
-    <button (click)="logout()">Logout</button>
-
-    @if(auth.isLoggedIn){
-      <section>
-        <h3>Claims (ID Token)</h3>
-        <pre>{{ auth.claims | json }}</pre>
-
-        <h3>WhoAmI (Gateway → gRPC Identity)</h3>
-        <pre>{{ whoami | json }}</pre>
-      </section>
-    } @else {
-      <p>No autenticado.</p>
-    }
-  `
+  imports: [JsonPipe, RouterLink],
+  templateUrl: './home.html',
+  styleUrls: ['./home.scss']
 })
 export class HomeComponent implements OnInit {
-  whoami: any;
+  whoami?: WhoAmIResponse;
 
-  constructor(public auth: AuthService, private idApi: IdentityApi) {}
+  constructor(public auth: AuthService, private service: HomeService, private router: Router) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     if (this.auth.isLoggedIn) {
-      this.idApi.whoAmI().subscribe({
+      this.service.whoAmI().subscribe({
         next: r => this.whoami = r,
-        error: e => this.whoami = { error: true, detail: e?.message ?? e }
+        error: e => {
+          this.logout(); 
+          this.router.navigate(['/']);
+        }
       });
     }
   }
