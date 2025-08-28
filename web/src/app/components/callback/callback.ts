@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { IdentityApi } from '../../integration/identity/identity.api';
+import { CallbackService } from './service/callback-service';
 
 @Component({
   standalone: true,
@@ -20,7 +20,7 @@ import { IdentityApi } from '../../integration/identity/identity.api';
 })
 export class CallbackComponent implements OnInit {
   ready = false;
-  constructor(public auth: AuthService, private router: Router, private idApi: IdentityApi) {}
+  constructor(public auth: AuthService, private router: Router, private service: CallbackService) {}
 
   async ngOnInit() {
     await this.auth.finishLoginOnCallback();
@@ -31,7 +31,7 @@ export class CallbackComponent implements OnInit {
 
     if (!alreadyLinked && id) {
       try {
-        await this.idApi.link(id).toPromise();
+        await this.service.link(id).toPromise();
         sessionStorage.setItem('ak_linked', '1');
         console.log('LINK ok');
       } catch (e) {
