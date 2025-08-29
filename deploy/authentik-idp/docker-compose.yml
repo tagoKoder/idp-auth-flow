@@ -26,9 +26,9 @@ services:
       POSTGRES_DB: ${PG_DB:-authentik}
     env_file:
       - .env
-    # límites (compatibles)
+    # limits (compatible)
     mem_limit: 200m
-    # límites (Swarm/compose moderno)
+    # limits (Swarm/modern compose)
     deploy:
       resources:
         limits:
