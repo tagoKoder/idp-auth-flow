@@ -78,7 +78,7 @@ services:
       # ...your current variables...
       AUTHENTIK_CORS__ALLOW_ALL_ORIGINS: "true"
       AUTHENTIK_CORS__ALLOW_CREDENTIALS: "true"
-      # Si prefieres ser estricto, usa ALLOWED_ORIGINS en vez de ALLOW_ALL_ORIGINS:
+      # If you prefer to be strict, use ALLOWED_ORIGINS instead of ALLOW_ALL_ORIGINS:
       AUTHENTIK_CORS__ALLOWED_ORIGINS: "http://localhost:4200,http://127.0.0.1:4200"
       AUTHENTIK_CORS__ALLOW_HEADERS: "authorization,content-type"
       AUTHENTIK_CORS__EXPOSE_HEADERS: "authorization,content-type"
