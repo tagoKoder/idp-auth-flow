@@ -75,7 +75,7 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-      # …tus variables actuales…
+      # ...your current variables...
       AUTHENTIK_CORS__ALLOW_ALL_ORIGINS: "true"
       AUTHENTIK_CORS__ALLOW_CREDENTIALS: "true"
       # Si prefieres ser estricto, usa ALLOWED_ORIGINS en vez de ALLOW_ALL_ORIGINS:
