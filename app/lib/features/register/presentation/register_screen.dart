@@ -7,6 +7,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../data/enrollment_service.dart';
 import '../../../theme/widgets/brand_header.dart';
 import '../../../theme/widgets/app_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -22,7 +23,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     setState(() { opening = true; error = null; });
     try {
       final dio = buildDio(tokenProvider: () async => null); // público
-      await EnrollmentService(dio).openPatientEnrollment();
+      //await EnrollmentService(dio).openPatientEnrollment();
+      final ok = await launchUrl(Uri.parse("https://idp.santiago-tumbaco.lat/if/flow/clinic-patient-enrollment/"), mode: LaunchMode.externalApplication);
+    if (!ok) { throw Exception('No se pudo abrir el navegador'); }
     } catch (e) {
       setState(() { error = '$e'; });
     } finally {

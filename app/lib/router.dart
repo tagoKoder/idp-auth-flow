@@ -9,5 +9,6 @@ final router = GoRouter(
     GoRoute(path: '/signin', builder: (_, __) => const SignInScreen()),
     GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
     GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
+    GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
   ],
 );
