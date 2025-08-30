@@ -66,7 +66,7 @@ services:
         max-file: "3"
   server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.6.4}
-    #restart: unless-stopped
+    restart: unless-stopped
     command: server
     environment:
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
@@ -95,20 +95,20 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    mem_limit: 220m
-    cpus: "0.30"
-    deploy:
-      resources:
-        limits:
-          memory: 220M
-          cpus: "0.30"
-        reservations:
-          memory: 180M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+#    mem_limit: 350M
+#    cpus: "0.30"
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 350M
+#          cpus: "0.30"
+#        reservations:
+#          memory: 180M
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "10m"
+#        max-file: "3"
   worker:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.6.4}
     restart: unless-stopped
@@ -139,20 +139,20 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    mem_limit: 150m
-    cpus: "0.30"
-    deploy:
-      resources:
-        limits:
-          memory: 150m
-          cpus: "0.30"
-        reservations:
-          memory: 128M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+#    mem_limit: 180M
+#    cpus: "0.30"
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 180M
+#          cpus: "0.30"
+#        reservations:
+#          memory: 128M
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "10m"
+#        max-file: "3"
 
 volumes:
   database:
