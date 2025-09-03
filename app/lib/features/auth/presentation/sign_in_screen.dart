@@ -1,3 +1,4 @@
+// lib/features/auth/presentation/sign_in_screen.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,15 +24,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
     final auth = ref.read(authServiceProvider);
     final ok = await auth.signIn();
-    if (!ok) { setState(() { loading = false; error = 'No se pudo iniciar sesión'; }); return; }
+    if (!ok) { setState(() { loading = false; error = 'Could not sign in'; }); return; }
 
     // Testea whoAmI para asegurar acceso
-    final dio = buildDio(tokenProvider: () => auth.accessToken);
+    final dio = buildDio(tokenProvider: ({forceRefresh = false}) => auth.ensureValidAccessToken());
     try {
-      await IdentityApi(dio).whoAmI();
+      await IdentityApi(dio, ref.read(tokenStorageProvider)).Link();
       if (mounted) context.go('/home');
     } catch (e) {
-      setState(() { error = 'Error al validar sesión: $e'; });
+      setState(() { error = 'Error validating session: $e'; });
     } finally {
       setState(() { loading = false; });
     }
@@ -46,14 +47,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const BrandHeader(title: 'Bienvenido', subtitle: 'Inicia sesión para continuar'),
+              const BrandHeader(title: 'Welcome', subtitle: 'Sign in to continue'),
               if (error != null) Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
               ),
-              AppButton(text: 'Iniciar sesión', onPressed: _login, loading: loading),
+              AppButton(text: 'Sign In', onPressed: _login, loading: loading),
               const SizedBox(height: 10),
-              TextButton(onPressed: () => context.go('/register'), child: const Text('¿No tienes cuenta? Regístrate'))
+              TextButton(onPressed: () => context.go('/register'), child: const Text('Don\'t have an account? Register'))
             ]),
           ),
         ),

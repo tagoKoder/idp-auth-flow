@@ -16,7 +16,7 @@ A Go gateway validates issued tokens (multi-issuer support) and communicates wit
 ---
 
 ## 📂 Repository layout
-
+```
 ├─ app/ # Flutter mobile app (patient)
 ├─ web/ # Angular admin web
 ├─ gateway/ # Go HTTP gateway (token verify, gRPC clients)
@@ -24,7 +24,7 @@ A Go gateway validates issued tokens (multi-issuer support) and communicates wit
 ├─ proto/ # Protobuf definitions (IdentityService)
 ├─ libs/ # Shared utilities for general tools
 └─ deploy/ # docker deployment
-
+```
 
 ---
 
@@ -46,6 +46,7 @@ A Go gateway validates issued tokens (multi-issuer support) and communicates wit
 ---
 
 ## 🏗️ High-level architecture
+```
 [Flutter app] --(OIDC code+PKCE)--> [Authentik]
 | |
 | <--- tokens (access/id/refresh) --
@@ -57,10 +58,10 @@ v
 [Identity svc]
 verifies JWT,
 upsert/link, WhoAmI
-
-
+```
+```
 Web (Angular) follows the same pattern: browser → Authentik → tokens → Gateway → Identity.
-
+```
 ---
 
 ## 📱 Auth flows

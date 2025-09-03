@@ -62,6 +62,13 @@
             <category android:name="android.intent.category.BROWSABLE"/>
             <data android:scheme="com.clinic.patient" android:host="signout"/>
         </intent-filter>
+        <!-- enrolled -->
+        <intent-filter android:priority="1000">
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="com.clinic.patient" android:host="enrolled"/>
+        </intent-filter>
         </activity>
 
         <!-- Don't delete the meta-data below.

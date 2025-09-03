@@ -1,26 +1,46 @@
+import 'package:app/core/storage/token_storage.dart';
 import 'package:dio/dio.dart';
 
 class WhoAmI {
-  final int personId;
-  final String email;
-  final String role;
-  final List<String> groups;
-  WhoAmI({required this.personId, required this.email, required this.role, required this.groups});
+  final int accountId;
+  final Person person;
+  WhoAmI({required this.accountId, required this.person});
 
   factory WhoAmI.fromJson(Map<String, dynamic> j) => WhoAmI(
-    personId: j['personId'] ?? 0,
+    accountId: j['account_id'] ?? 0,
+    person: Person.fromJson(j['person'] ?? {}),
+  );
+}
+class Person{
+  final int id;
+  final String name;
+  final String email;
+  Person({required this.id, required this.name, required this.email});
+
+  factory Person.fromJson(Map<String, dynamic> j) => Person(
+    id: j['id'] ?? 0,
+    name: j['name'] ?? '',
     email: j['email'] ?? '',
-    role: j['role'] ?? '',
-    groups: (j['groups'] as List?)?.cast<String>() ?? const [],
   );
 }
 
 class IdentityApi {
   final Dio dio;
-  IdentityApi(this.dio);
+  final TokenStorage storage;
+  IdentityApi(this.dio, this.storage);
 
+  Future<WhoAmI> Link() async {
+    final idt = await storage.id;
+    if (idt == null || idt.isEmpty) {
+      throw Exception('Missing ID token');
+    }
+    final r = await dio.post('/api/v1/end-user-app/identity/link',
+    options: Options(headers: {'X-ID-Token': idt})
+    );
+    return WhoAmI.fromJson(r.data as Map<String, dynamic>);
+  }
   Future<WhoAmI> whoAmI() async {
-    final r = await dio.get('/api/v1/patient-app/identity/whoami');
+    final r = await dio.get('/api/v1/end-user-app/identity/whoami');
     return WhoAmI.fromJson(r.data as Map<String, dynamic>);
   }
 }
