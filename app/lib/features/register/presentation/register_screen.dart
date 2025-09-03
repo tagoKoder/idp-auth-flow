@@ -1,3 +1,4 @@
+import 'package:app/core/config/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,10 +23,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _openEnrollment() async {
     setState(() { opening = true; error = null; });
     try {
-      final dio = buildDio(tokenProvider: () async => null); // público
+      final dio = buildDio(tokenProvider: ({forceRefresh = false}) async => null); // público
       //await EnrollmentService(dio).openPatientEnrollment();
-      final ok = await launchUrl(Uri.parse("https://idp.santiago-tumbaco.lat/if/flow/clinic-patient-enrollment/"), mode: LaunchMode.externalApplication);
-    if (!ok) { throw Exception('No se pudo abrir el navegador'); }
+      final ok = await launchUrl(Uri.parse(Env.enrollmentRedirectUrl), mode: LaunchMode.externalApplication);
+    if (!ok) { throw Exception('Could not open browser'); }
     } catch (e) {
       setState(() { error = '$e'; });
     } finally {
@@ -47,10 +48,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const BrandHeader(title: 'Crear cuenta', subtitle: 'Regístrate como paciente'),
-              Text(
-                'Te llevaremos a una página segura para completar tu registro. '
-                'Al finalizar, vuelve a la app y presiona “Ya me registré” para iniciar sesión.',
+                const BrandHeader(title: 'Create Account', subtitle: 'Register as a patient'),
+                Text(
+                'We will take you to a secure page to complete your registration. '
+                'When you finish, return to the app and press “I have already registered” to sign in.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
               ),
               const SizedBox(height: 16),
@@ -59,9 +60,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 child: Text(error!, style: TextStyle(color: cs.error)),
               ),
               Row(children: [
-                AppButton(text: 'Ir al registro', onPressed: _openEnrollment, loading: opening),
+                AppButton(text: 'Go to Registration', onPressed: _openEnrollment, loading: opening),
                 const SizedBox(width: 12),
-                OutlinedButton(onPressed: _goLogin, child: const Text('Ya me registré')),
+                OutlinedButton(onPressed: _goLogin, child: const Text('I have already registered')),
               ]),
             ]),
           ),
